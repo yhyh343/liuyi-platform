@@ -100,7 +100,7 @@ function showCalibrateResult(data) {
             " | 有具体事件: " + (data.data.calibrate_info.has_specific_event ? "是" : "否") +
             " | 有决策目标: " + (data.data.calibrate_info.has_decision_goal ? "是" : "否") + "</p>" +
             "<button class=\"btn-primary\" style='margin-top:10px;padding:8px 16px;font-size:0.85em' onclick='goToMethod()'>继续起卦</button>";
-        currentCaseId = data.data.case_id;
+        currentCaseId = data.data.case_id; window._lastQuestion = document.getElementById("question-input").value.trim(); window._lastQuestion = document.getElementById("question-input").value.trim();
         currentGuaDisk = data.data.gua_disk;
     }
 }
@@ -154,7 +154,7 @@ async function doDivination(method, params) {
             if (activeBtn) activeBtn.disabled = false;
             return;
         }
-        currentCaseId = data.data.case_id;
+        currentCaseId = data.data.case_id; window._lastQuestion = document.getElementById("question-input").value.trim();
         currentGuaDisk = data.data.gua_disk;
     }
 
