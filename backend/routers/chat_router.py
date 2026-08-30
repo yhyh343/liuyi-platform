@@ -41,7 +41,9 @@ async def chat_stream(req: ChatRequest, db: Session = Depends(get_db)):
         # 构建上下文：如果有卦盘信息则带入
         context_info = {}
         if case_id:
-            context_info = {'case_id': case_id}
+            case = db.query(GuaCase).filter(GuaCase.case_id == case_id).first()
+            if case:
+                context_info = {'case_id': case_id, 'question': case.question, 'category': case.category, 'gua_disk': case.gua_disk}
         elif req.question:
             context_info = {'question': req.question, 'category': req.category, 'gua_disk': req.gua_disk}
         
