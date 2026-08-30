@@ -270,16 +270,56 @@ async function analyzeGua(caseId) {
 function displayAnalysisResult(analysis, guaDisk) {
     const result = document.getElementById("analysis-result");
     result.style.display = "block";
-    const text = JSON.stringify(analysis, null, 2);
-    result.innerHTML = "<div class='analysis-text'>" + escapeHtml(text) + "</div>" +
-        '<div class="analysis-meta">' +
-        '<span>卦名: ' + escapeHtml((guaDisk && guaDisk.gua_name) || "") + '</span>' +
-        '<span>上卦: ' + escapeHtml((guaDisk && guaDisk.upper_gua) || "") + '</span>' +
-        '<span>下卦: ' + escapeHtml((guaDisk && guaDisk.lower_gua) || "") + '</span>' +
-        '<span>趋势: ' + escapeHtml((guaDisk && guaDisk.trend) || "") + '</span>' +
-        '</div>';
+    const g = guaDisk || {};
+    const trend = analysis.step7_trend || "平";
+    const trendIcon = trend === "吉" ? "sun" : trend === "需留意" ? "warning" : "circle";
+    const trendColor = trend === "吉" ? "#4ade80" : trend === "需留意" ? "#f87171" : "#fbbf24";
+    const confidence = Math.round((analysis.confidence || 0.5) * 100);
 
-    // Show chat section
+    let html = "";
+    html += '<div class="trend-banner" style="text-align:center;padding:12px 0;margin-bottom:12px;border-bottom:1px solid rgba(200,168,78,0.2)">';
+    html += '<span style="font-size:1.4em">' + (trend === "吉" ? "&#9728;" : trend === "需留意" ? "&#9888;" : "&#9898;") + "</span> ";
+    html += '<span style="font-size:1.1em;color:' + trendColor + ';font-weight:600">趋势：' + escapeHtml(trend) + "</span> ";
+    html += '<span style="color:var(--text-dim);font-size:0.85em">置信度 ' + confidence + "%</span>";
+    html += "</div>";
+
+    const steps = [
+        ["step1_yong_shen", "取用神"],
+        ["step2_shi_ying", "察世应"],
+        ["step3_moving", "观动爻"],
+        ["step4_wang_shuai", "断旺衰"],
+        ["step5_pattern", "看格局"],
+        ["step6_rag_ref", "参RAG"],
+    ];
+
+    for (const [key, title] of steps) {
+        const val = analysis[key];
+        if (!val) continue;
+        html += '<div class="step-card">';
+        html += '<div class="step-title">&#128161; ' + escapeHtml(title) + "</div>";
+        html += '<div class="step-content">' + escapeHtml(val) + "</div>";
+        html += "</div>";
+    }
+
+    if (analysis.step8_advice) {
+        html += '<div class="step-card advice">';
+        html += '<div class="step-title">&#128221; 建议参考</div>';
+        html += '<div class="step-content">' + escapeHtml(analysis.step8_advice) + "</div>";
+        html += "</div>";
+    }
+
+    if (analysis.disclaimer) {
+        html += '<div class="disclaimer">' + escapeHtml(analysis.disclaimer) + "</div>";
+    }
+
+    html += '<div class="analysis-meta">';
+    html += "<span>卦名: " + escapeHtml(g.gua_name || "") + "</span>";
+    html += "<span>上卦: " + escapeHtml(g.upper_gua || "") + "</span>";
+    html += "<span>下卦: " + escapeHtml(g.lower_gua || "") + "</span>";
+    html += "<span>趋势: " + escapeHtml(g.trend || "") + "</span>";
+    html += "</div>";
+
+    result.innerHTML = html;
     document.getElementById("chat-section").style.display = "block";
 }
 
