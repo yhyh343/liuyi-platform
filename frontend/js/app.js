@@ -273,10 +273,10 @@ function displayAnalysisResult(analysis, guaDisk) {
     const text = JSON.stringify(analysis, null, 2);
     result.innerHTML = "<div class='analysis-text'>" + escapeHtml(text) + "</div>" +
         '<div class="analysis-meta">' +
-        '<span>卦名: ' + escapeHtml(data.gua_name || "") + '</span>' +
-        '<span>上卦: ' + escapeHtml(data.upper_gua || "") + '</span>' +
-        '<span>下卦: ' + escapeHtml(data.lower_gua || "") + '</span>' +
-        '<span>趋势: ' + escapeHtml(data.trend || "") + '</span>' +
+        '<span>卦名: ' + escapeHtml((guaDisk && guaDisk.gua_name) || "") + '</span>' +
+        '<span>上卦: ' + escapeHtml((guaDisk && guaDisk.upper_gua) || "") + '</span>' +
+        '<span>下卦: ' + escapeHtml((guaDisk && guaDisk.lower_gua) || "") + '</span>' +
+        '<span>趋势: ' + escapeHtml((guaDisk && guaDisk.trend) || "") + '</span>' +
         '</div>';
 
     // Show chat section
@@ -432,7 +432,7 @@ async function loadGuaCase(caseId) {
             currentGuaDisk = data.data.gua_disk || { yao_details: [], gua_name: "未知" };
             showPanel("panel-result");
             renderGuaDisk(currentGuaDisk);
-            displayAnalysisResult(data.data);
+            displayAnalysisResult(data.data.analysis_result, data.data.gua_disk);
         }
     } catch (e) {
         alert("加载失败: " + e.message);
