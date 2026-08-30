@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI六爻 · 决策控制台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="bg-scanline"></div>
+
+    <!-- ===== Hero Section ===== -->
+    <div class="hero-section" id="hero-section">
+        <div class="hero-bg-glow"></div>
+        <div class="bagua-display">
+            <div class="bagua-ring outer" id="bagua-outer"></div>
+            <div class="bagua-ring mid" id="bagua-mid"></div>
+            <div class="bagua-ring inner" id="bagua-inner"></div>
+            <div class="bagua-core">
+                <div class="core-symbol" id="core-symbol">☰</div>
+                <div class="core-label">六爻</div>
+            </div>
+            <div class="yao-preview" id="yao-preview">
+                <div class="yao-row" data-n="6"><span class="yao-char"></span></div>
+                <div class="yao-row" data-n="5"><span class="yao-char"></span></div>
+                <div class="yao-row" data-n="4"><span class="yao-char"></span></div>
+                <div class="yao-row" data-n="3"><span class="yao-char"></span></div>
+                <div class="yao-row" data-n="2"><span class="yao-char"></span></div>
+                <div class="yao-row" data-n="1"><span class="yao-char"></span></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1>AI六爻决策控制台</h1>
+            <p class="hero-sub">诚心问卦 · 卦象参详 · 多轮对话</p>
+            <div class="hero-tags">
+                <span class="tag">传统六爻</span>
+                <span class="tag">AI解析</span>
+                <span class="tag">即时起卦</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Main Content ===== -->
+    <div class="container">
+
+        <!-- Free Chat -->
+        <section class="card" id="panel-chat">
+            <div class="card-header">
+                <span class="card-icon">&#128308;</span>
+                <h2>自由问卦</h2>
+                <span class="card-badge">随时提问</span>
+            </div>
+            <div class="chat-box" id="chat-box">
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-row">
+                    <input type="text" id="quick-input" placeholder="请输入您的问题..." autocomplete="off">
+                    <button id="quick-send" class="btn-send">&#10148;</button>
+                </div>
+            </div>
+            <div class="chips" id="chips">
+                <button class="chip" data-q="今日运势如何">&#128308; 今日运势</button>
+                <button class="chip" data-q="最近财运怎样">&#128176; 财运走势</button>
+                <button class="chip" data-q="这个项目能成吗">&#128202; 项目分析</button>
+                <button class="chip" data-q="感情运势如何">&#128154; 感情解读</button>
+                <button class="chip" data-q="工作会有变动吗">&#128188; 工作占卜</button>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="card" id="panel-actions">
+            <div class="card-header">
+                <span class="card-icon">&#9876;</span>
+                <h2>快速起卦</h2>
+            </div>
+            <div class="action-grid">
+                <button class="action-btn gold" data-mode="normal">
+                    <span class="action-icon">&#128179;</span>
+                    <span class="action-text">铜钱问卦</span>
+                    <span class="action-desc">三枚铜钱摇六爻</span>
+                </button>
+                <button class="action-btn purple" data-mode="xiang">
+                    <span class="action-icon">&#128303;</span>
+                    <span class="action-text">上象卦解</span>
+                    <span class="action-desc">象数派深度解读</span>
+                </button>
+                <button class="action-btn cyan" data-mode="trend">
+                    <span class="action-icon">&#128200;</span>
+                    <span class="action-text">趋势分析</span>
+                    <span class="action-desc">动态趋势推演</span>
+                </button>
+                <button class="action-btn red" data-mode="history">
+                    <span class="action-icon">&#128203;</span>
+                    <span class="action-text">我的卦例</span>
+                    <span class="action-desc">查看历史占卜</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 1: Category -->
+        <section class="card step-panel" id="panel-category" style="display:none;">
+            <div class="card-header">
+                <span class="card-icon">&#127829;</span>
+                <h2>选择占事分类</h2>
+                <button class="btn-back" onclick="backToHome()">&#8592; 返回</button>
+            </div>
+            <p class="step-desc">请选择您要占问的事类，系统将针对性校准问题</p>
+            <div class="cat-grid">
+                <button class="cat-btn" data-cat="工作事业"><span class="cat-icon">&#128188;</span><span class="cat-name">工作事业</span></button>
+                <button class="cat-btn" data-cat="财运投资"><span class="cat-icon">&#128176;</span><span class="cat-name">财运投资</span></button>
+                <button class="cat-btn" data-cat="感情婚姻"><span class="cat-icon">&#128154;</span><span class="cat-name">感情婚姻</span></button>
+                <button class="cat-btn" data-cat="考试学业"><span class="cat-icon">&#128218;</span><span class="cat-name">考试学业</span></button>
+                <button class="cat-btn" data-cat="出行旅行"><span class="cat-icon">&#9992;</span><span class="cat-name">出行旅行</span></button>
+                <button class="cat-btn" data-cat="健康疾病"><span class="cat-icon">&#128138;</span><span class="cat-name">健康疾病</span></button>
+            </div>
+            <div class="question-area">
+                <label>请详细描述您的问题</label>
+                <textarea id="question-input" rows="3" placeholder="例如：下周A公司技术岗面试能否通过？"></textarea>
+                <div id="calibrate-result" class="calibrate-box" style="display:none;"></div>
+                <button class="btn-primary" id="submit-question">&#9876; 校准问题并起卦</button>
+            </div>
+        </section>
+
+        <!-- Step 2: Method -->
+        <section class="card step-panel" id="panel-method" style="display:none;">
+            <div class="card-header">
+                <span class="card-icon">&#128179;</span>
+                <h2>选择起卦方式</h2>
+                <button class="btn-back" onclick="backToHome()">&#8592; 返回</button>
+            </div>
+            <p class="step-desc">请选择起卦方式，心诚则灵</p>
+            <div class="method-grid">
+                <button class="method-card" data-method="coin"><div class="method-icon">&#128179;</div><div class="method-name">手动铜钱</div><div class="method-desc">三枚铜钱摇六爻</div></button>
+                <button class="method-card" data-method="coin-auto"><div class="method-icon">&#128640;</div><div class="method-name">自动铜钱</div><div class="method-desc">系统一键摇卦</div></button>
+                <button class="method-card" data-method="time"><div class="method-icon">&#128337;</div><div class="method-name">时间起卦</div><div class="method-desc">以当前时辰起卦</div></button>
+                <button class="method-card" data-method="number"><div class="method-icon">&#128221;</div><div class="method-name">数字起卦</div><div class="method-desc">输入数字成卦</div></button>
+            </div>
+            <div id="number-area" class="number-area" style="display:none;">
+                <label>请输入一个正整数（心念所动之数）</label>
+                <input type="number" id="number-input" min="1" placeholder="例如：888">
+                <button class="btn-primary" id="confirm-number">起卦</button>
+            </div>
+        </section>
+
+        <!-- Step 3: Result -->
+        <section class="card step-panel" id="panel-result" style="display:none;">
+            <div class="card-header">
+                <span class="card-icon">&#9876;</span>
+                <h2>卦盘与解读</h2>
+                <button class="btn-back" onclick="backToHome()">&#8592; 返回</button>
+            </div>
+            <div id="gua-display" class="gua-display"></div>
+            <div id="analysis-loading" class="loading-box" style="display:none;">
+                <div class="spinner">&#9775;&#9776;&#9777;&#9778;&#9779;&#9780;&#9781;&#9782;</div>
+                <p>AI正在解析卦象...</p>
+                <div class="progress-bar"><div id="progress-fill"></div></div>
+            </div>
+            <div id="analysis-result" class="analysis-result" style="display:none;"></div>
+            <div id="chat-section" class="chat-section" style="display:none;">
+                <div class="chat-section-header">
+                    <span>&#128172;</span>
+                    <h3>追问对话</h3>
+                    <span class="hint">可针对卦象深入询问</span>
+                </div>
+                <div id="case-chat-history" class="chat-history"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="case-chat-input" placeholder="输入追问内容...">
+                    <button id="case-chat-send" class="btn-send">&#10148;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 4: History -->
+        <section class="card step-panel" id="panel-history" style="display:none;">
+            <div class="card-header">
+                <span class="card-icon">&#128203;</span>
+                <h2>我的卦例</h2>
+                <button class="btn-back" onclick="backToHome()">&#8592; 返回</button>
+            </div>
+            <div id="gua-list" class="gua-list"></div>
+        </section>
+
+        <footer>
+            <div class="footer-deco">
+                <div class="footer-line"></div>
+                <div class="footer-symbols">☰☱☲☳☴☵☶☷</div>
+                <div class="footer-line"></div>
+            </div>
+            <p>本平台基于传统六爻民俗文化，仅供决策参考</p>
+            <p>所有输出仅为趋势参考，不做人生定论依据</p>
+        </footer>
+    </div>
+
+    <!-- Coin Animation Overlay -->
+    <div id="coin-overlay" class="coin-overlay" style="display:none;">
+        <div class="coin-bg"></div>
+        <div class="coin-container">
+            <div class="coin-tray">
+                <div class="coin" id="c1"><div class="face front"><span class="char">乾隆</span><div class="square"></div></div><div class="face back"><span class="char">通宝</span><div class="square"></div></div></div>
+                <div class="coin" id="c2"><div class="face front"><span class="char">乾隆</span><div class="square"></div></div><div class="face back"><span class="char">通宝</span><div class="square"></div></div></div>
+                <div class="coin" id="c3"><div class="face front"><span class="char">乾隆</span><div class="square"></div></div><div class="face back"><span class="char">通宝</span><div class="square"></div></div></div>
+            </div>
+            <p class="anim-text">正在摇卦，诚心祷告中...</p>
+            <p class="anim-yao" id="anim-yao"></p>
+        </div>
+    </div>
+
+    <script src="js/dynamics.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
