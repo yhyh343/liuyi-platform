@@ -49,7 +49,7 @@ async def analyze_gua(req: AnalyzeRequest, db: Session = Depends(get_db)):
     db.add(chat_msg)
     db.commit()
 
-    return APIResponse.ok(data=result)
+    return APIResponse.ok(data={"analysis_result": result, "gua_disk": case.gua_disk, "case_id": case.case_id, "question": case.question, "category": case.category})
 
 
 @router.post("/analyze/stream")

@@ -253,7 +253,7 @@ async function analyzeGua(caseId) {
         setTimeout(() => {
             loading.style.display = "none";
             if (data.success && data.data) {
-                displayAnalysisResult(data.data);
+                displayAnalysisResult(data.data.analysis_result, data.data.gua_disk);
             } else {
                 result.style.display = "block";
                 result.innerHTML = "<p style='color:#c85050'>解析失败: " + escapeHtml(data.message || "未知错误") + "</p>";
@@ -267,10 +267,10 @@ async function analyzeGua(caseId) {
     }
 }
 
-function displayAnalysisResult(data) {
+function displayAnalysisResult(analysis, guaDisk) {
     const result = document.getElementById("analysis-result");
     result.style.display = "block";
-    const text = data.analysis_text || data.result || JSON.stringify(data, null, 2);
+    const text = JSON.stringify(analysis, null, 2);
     result.innerHTML = "<div class='analysis-text'>" + escapeHtml(text) + "</div>" +
         '<div class="analysis-meta">' +
         '<span>卦名: ' + escapeHtml(data.gua_name || "") + '</span>' +
