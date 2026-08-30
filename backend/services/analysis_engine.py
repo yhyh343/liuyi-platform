@@ -7,14 +7,14 @@ from config import settings
 
 
 STEP_PROMPTS = [
-    "Step1【取用神】：根据占事分类{category}，说明用神选取的依据和当前用神是哪一爻",
-    "Step2【察世应】：分析世爻与应爻的位置关系，判断彼此生克与旺衰状态",
-    "Step3【观动爻】：分析动爻的变动趋势，是否化进神或退神，回头生克情况",
-    "Step4【断旺衰】：综合月建日辰判断各关键爻的旺衰状态，说明旺衰对事态的影响",
-    "Step5【看格局】：分析卦中是否存在特殊格局（如六冲、六合、三合局等）及其含义",
-    "Step6【参RAG】：结合以下知识库条目进行分析：{rag_context}",
-    "Step7【综合判断】：综合以上分析，给出整体趋势判断（趋势：吉/平/需留意）",
-    "Step8【建议参考】：给出中性、可执行的参考建议，并附加合规免责声明"
+    "【取用神】根据占事分类{category}，说明用神选取依据",
+    "【察世应】分析世爻与应爻的位置关系和生克状态",
+    "【观动爻】分析动爻变动趋势和回头生克情况",
+    "【断旺衰】综合月建日辰判断各爻旺衰状态",
+    "【看格局】分析卦中特殊格局（六冲/六合/三合等）",
+    "【参RAG】结合知识库：{rag_context}",
+    "【综合判断】给出整体趋势（吉/平/需留意）",
+    "【建议参考】给出中性可执行建议+免责声明"
 ]
 
 
@@ -27,7 +27,7 @@ def build_analysis_prompt(gua_disk: Dict, rag_context: str, question: str, categ
     ])
     step_text = chr(10).join(STEP_PROMPTS)
     step_text = step_text.format(category=category, rag_context=rag_context)
-    prompt = """你是六爻解卦分析师，严格遵循以下8步流程输出结构化报告。
+    prompt = """你是六爻解卦分析师。请分析以下卦象并输出JSON。
 
 【卦盘信息】
 卦名：""" + str(gua_disk.get("gua_name","")) + """
@@ -46,7 +46,7 @@ def build_analysis_prompt(gua_disk: Dict, rag_context: str, question: str, categ
 """ + step_text + """
 
 【输出格式要求】
-严格按以下JSON Schema输出，不得遗漏任何字段：
+请按以下JSON格式输出（只用中文）：
 {
   "step1_yong_shen": "用神选取说明",
   "step2_shi_ying": "世应关系分析",
@@ -62,7 +62,7 @@ def build_analysis_prompt(gua_disk: Dict, rag_context: str, question: str, categ
   "risk_level": "低/中/高"
 }
 
-重要：所有输出必须为中性参考表述，禁止使用绝对化词汇。
+要求：中性表述，禁止绝对化词汇。
 """
     return prompt
 
