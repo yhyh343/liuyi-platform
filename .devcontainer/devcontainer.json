@@ -1,0 +1,11 @@
+{
+  "name": "AI六爻决策控制台",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "forwardPorts": [8000],
+  "postCreateCommand": "pip install -r requirements.txt",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  }
+}
