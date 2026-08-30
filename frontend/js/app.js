@@ -1,4 +1,4 @@
-﻿const API_BASE = "http://localhost:8000";
+const API_BASE = "http://localhost:8000";
 
 let currentCategory = "";
 let currentCaseId = null;
@@ -33,6 +33,7 @@ document.querySelectorAll(".action-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         const mode = btn.dataset.mode;
         currentMode = mode;
+        if (mode === "ai-assist") { showPanel("panel-ai-assist"); return; }
         if (mode === "normal" || mode === "xiang") {
             showPanel("panel-category");
         } else if (mode === "trend") {

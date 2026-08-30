@@ -736,3 +736,47 @@ footer {
     font-style: italic;
 }
 
+
+/* ===== AI Assistant Panel ===== */
+.ai-chat-container {
+    padding: 10px 0;
+}
+.ai-service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+.ai-service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(200,168,78,0.2);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.ai-service-card:hover {
+    background: rgba(200,168,78,0.1);
+    border-color: rgba(200,168,78,0.5);
+    transform: translateY(-2px);
+}
+.ai-service-icon {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+.ai-service-name {
+    font-size: 1em;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.ai-service-desc {
+    font-size: 0.78em;
+    color: var(--text-dim);
+    text-align: center;
+}
+
