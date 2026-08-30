@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>AI六爻 · 决策控制台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
@@ -92,13 +92,61 @@
                     <span class="action-text">趋势分析</span>
                     <span class="action-desc">动态趋势推演</span>
                 </button>
+                                <button class="action-btn green" data-mode="ai-assist">
+                    <span class="action-icon">&#129302;</span>
+                    <span class="action-text">AI 助手</span>
+                    <span class="action-desc">接入国内免费AI</span>
+                </button>
                 <button class="action-btn red" data-mode="history">
                     <span class="action-icon">&#128203;</span>
                     <span class="action-text">我的卦例</span>
                     <span class="action-desc">查看历史占卜</span>
                 </button>
             </div>
-        </section>
+        
+        <!-- AI Assistant -->
+        <section class="card" id="panel-ai-assist" style="display:none;">
+            <div class="card-header">
+                <span class="card-icon">&#129302;</span>
+                <h2>AI 助手</h2>
+                <span class="card-badge">国内直连</span>
+            </div>
+            <div class="ai-chat-container">
+                <p style="color:var(--text-dim);text-align:center;padding:10px;">选择下方任意一个AI服务，国内直连无需梯子</p>
+                <div class="ai-service-grid">
+                    <a href="https://kimi.moonshot.cn" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#127769;</div>
+                        <div class="ai-service-name">Kimi 智能助手</div>
+                        <div class="ai-service-desc">月之暗面 · 支持长文本</div>
+                    </a>
+                    <a href="https://chatglm.cn" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#129504;</div>
+                        <div class="ai-service-name">智谱清言</div>
+                        <div class="ai-service-desc">GLM-4 · 每日免费50万token</div>
+                    </a>
+                    <a href="https://tongyi.aliyun.com" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#10024;</div>
+                        <div class="ai-service-name">通义千问</div>
+                        <div class="ai-service-desc">Qwen · 阿里出品</div>
+                    </a>
+                    <a href="https://www.doubao.com" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#128172;</div>
+                        <div class="ai-service-name">豆包</div>
+                        <div class="ai-service-desc">字节跳动 · 免费可用</div>
+                    </a>
+                    <a href="https://yiyan.baidu.com" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#128214;</div>
+                        <div class="ai-service-name">文心一言</div>
+                        <div class="ai-service-desc">百度 · ERNIE Bot</div>
+                    </a>
+                    <a href="https://cloud.siliconflow.cn" target="_blank" class="ai-service-card">
+                        <div class="ai-service-icon">&#9889;</div>
+                        <div class="ai-service-name">硅基流动</div>
+                        <div class="ai-service-desc">API平台 · 注册送30元</div>
+                    </a>
+                </div>
+            </div>
+        </section></section>
 
         <!-- Step 1: Category -->
         <section class="card step-panel" id="panel-category" style="display:none;">
@@ -209,6 +257,6 @@
     </div>
 
     <script src="js/dynamics.js"></script>
-    <script src="js/app.js?v=5"></script>
+    <script src="js/app.js?v=6"></script>
 </body>
 </html>
