@@ -38,10 +38,18 @@ async def chat_stream(req: ChatRequest, db: Session = Depends(get_db)):
         db.commit()
 
     async def event_stream():
+        # 构建上下文：如果有卦盘信息则带入
+        context_info = {}
+        if case_id:
+            context_info = {'case_id': case_id}
+        elif req.question:
+            context_info = {'question': req.question, 'category': req.category, 'gua_disk': req.gua_disk}
+        
         async for event in engine.stream_chat(
             case_id=case_id,
             history=history_list,
-            message=req.message
+            message=req.message,
+            context=context_info
         ):
             yield event
         yield "event: complete\ndata: {}\n\n"

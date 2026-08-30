@@ -163,9 +163,20 @@ class AnalysisEngine:
             yield "event: report" + chr(10) + "data: " + json.dumps({"text": full}, ensure_ascii=False) + chr(10) + chr(10)
             yield "event: done" + chr(10) + "data: {}" + chr(10) + chr(10)
 
-    async def stream_chat(self, case_id, history: list, message: str) -> AsyncGenerator[str, None]:
+    async def stream_chat(self, case_id, history: list, message: str, context: dict = None) -> AsyncGenerator[str, None]:
         if self._use_mock:
-            resp = "这是针对您问题的参考回复。请结合卦象信息综合判断。"
+            resp = "基于卦象分析，针对您的问题【"
+            if context and context.get("question"):
+                resp += context["question"]
+            else:
+                resp += message
+            resp += "】，以下是参考解读。\n\n"
+            if context and context.get("gua_disk"):
+                gd = context["gua_disk"]
+                resp += "当前卦象：" + str(gd.get("gua_name", "")) + "（" + str(gd.get("upper_gua", "")) + "上" + str(gd.get("lower_gua", "")) + "下）"
+                resp += "，趋势：" + str(gd.get("trend", "静")) + "。"
+            resp += "请结合卦象信息综合判断。"
+
             for char in resp:
                 yield "event: token" + chr(10) + "data: " + json.dumps({"token": char}, ensure_ascii=False) + chr(10) + chr(10)
             yield "event: report" + chr(10) + "data: " + json.dumps({"text": resp}, ensure_ascii=False) + chr(10) + chr(10)

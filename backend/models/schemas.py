@@ -22,6 +22,9 @@ class AnalyzeRequest(BaseModel):
 class ChatRequest(BaseModel):
     case_id: Optional[str] = None
     message: str = Field(..., min_length=1, max_length=500)
+    question: Optional[str] = None
+    category: Optional[str] = None
+    gua_disk: Optional[Dict[str, Any]] = None
 
 
 class ListGuaRequest(BaseModel):

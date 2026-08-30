@@ -399,7 +399,7 @@ async function sendQuickChat() {
         const resp = await fetch(API_BASE + "/api/chat/stream", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ case_id: null, message })
+            body: JSON.stringify({ case_id: currentCaseId || null, message, question: currentCategory ? document.getElementById("question-input").value.trim() || message : message, category: currentCategory || null, gua_disk: currentGuaDisk })
         });
         const reader = resp.body.getReader();
         const dec = new TextDecoder();
