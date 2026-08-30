@@ -165,17 +165,49 @@ class AnalysisEngine:
 
     async def stream_chat(self, case_id, history: list, message: str, context: dict = None) -> AsyncGenerator[str, None]:
         if self._use_mock:
-            resp = "基于卦象分析，针对您的问题【"
-            if context and context.get("question"):
-                resp += context["question"]
+            # 构建有上下文的回复
+            resp_parts = []
+            q = (context.get("question") if context else None) or message
+            cat = context.get("category", "") if context else ""
+            gd = context.get("gua_disk") if context else None
+            
+            resp_parts.append(f"关于【{q}】（{cat or '占事'}）的参考解读：")
+            resp_parts.append("")
+            
+            if gd:
+                gname = gd.get("gua_name", "")
+                upper = gd.get("upper_gua", "")
+                lower = gd.get("lower_gua", "")
+                trend = gd.get("trend", "静")
+                shi = gd.get("shi_yao", 0)
+                ying = gd.get("ying_yao", 0)
+                moving = gd.get("moving_yao", [])
+                resp_parts.append(f"当前得【{gname}】卦，上{upper}下{lower}，趋势{trend}。")
+                if moving:
+                    resp_parts.append(f"动爻在第{moving}爻，主事态有变化。")
+                else:
+                    resp_parts.append("静卦无动爻，主事态平稳发展。")
+                resp_parts.append(f"世爻在第{shi}爻代表您，应爻在第{ying}爻代表所问之事。")
+                resp_parts.append("")
+            
+            # 根据问题类型给出针对性回复
+            if "天气" in q or "天气" in message or "气温" in q or "下雨" in q:
+                resp_parts.append("此问已超出六爻占卜范畴，建议使用天气类应用获取准确预报。")
+            elif "运势" in q or "运气" in q:
+                resp_parts.append("运势讲究天时地利人和，卦象显示当前状态平稳，建议把握当下，主动求变。")
+            elif "面试" in q or "工作" in q or "事业" in q:
+                resp_parts.append("事业问卦重在审时度势，卦象提示需观察时机，不宜冒进，稳扎稳打为上。")
+            elif "财运" in q or "投资" in q or "股票" in q:
+                resp_parts.append("财运问卦需看势态，当前宜守不宜攻，理性判断，切勿盲目。")
+            elif "感情" in q or "恋爱" in q or "婚姻" in q:
+                resp_parts.append("感情问卦重在缘分与沟通，卦象提示以真诚为本，顺其自然。")
             else:
-                resp += message
-            resp += "】，以下是参考解读。\n\n"
-            if context and context.get("gua_disk"):
-                gd = context["gua_disk"]
-                resp += "当前卦象：" + str(gd.get("gua_name", "")) + "（" + str(gd.get("upper_gua", "")) + "上" + str(gd.get("lower_gua", "")) + "下）"
-                resp += "，趋势：" + str(gd.get("trend", "静")) + "。"
-            resp += "请结合卦象信息综合判断。"
+                resp_parts.append("卦象仅示趋势，具体仍需结合实际情况综合判断。保持理性态度，方为上策。")
+            
+            resp_parts.append("")
+            resp_parts.append("免责声明：本分析基于传统六爻民俗文化，仅供决策参考，不构成人生定论依据。")
+            
+            resp = "\n".join(resp_parts)
 
             for char in resp:
                 yield "event: token" + chr(10) + "data: " + json.dumps({"token": char}, ensure_ascii=False) + chr(10) + chr(10)
